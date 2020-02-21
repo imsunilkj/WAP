@@ -1,7 +1,7 @@
 def hello():
     print("Hello World")
 
-
+                        
 # ## All CSS Classes ###
 # ## Tab Index left =                "app _1Jzz1 two"
 # ## Tab Index Right =               "_1_keJ"
@@ -43,3 +43,6 @@ def hello():
 # https://www.geekyhub.in/post/making-a-whatsapp-bot-using-python-selenium
 # https://selenium.dev/documentation/en/getting_started_with_webdriver/performing_actions_on_the_aut/
 # http://ashishkhan.com/blog/buddy-whatsapp-chat-bot-with-python
+# https://github.com/JoshData/python-email-validator
+# https://anaconda.org/conda-forge/email_validator
+# https://github.com/daviddrysdale/python-phonenumbers
