@@ -1,0 +1,3 @@
+conda install -c conda-forge email_validator
+conda install -c conda-forge phonenumbers
+conda install -c conda-forge selenium
