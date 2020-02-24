@@ -158,7 +158,8 @@ print('Functions Loaded')
 driver = load_driver_and_webpage()
 ##########################################################
 
-#%% ######################################################
+#%%c 
+#######################################################
 ### Refreash Page and Variables ### Optional
 ##########################################################
 time.sleep(1)
@@ -166,7 +167,7 @@ driver.refresh()
 ### Final Data and Constructor behaviour ###
 ### Left Box, All Contacts
 contacts_name_set = set() ### Set of all contacts (Unique String Elements), left tab
-contacts_dict_list = list() ### All scrapped names from contact selection, left tab
+contacts_data_list = list() ### All scrapped names from contact selection, left tab
 ### Right Box, Selected Contact & Respective Chat
 chatbox_name_set = set() ### Set of all contacts (Unique String Elements), Right tab
 contacts_name_set.add('Sunil')
@@ -191,7 +192,7 @@ full_chatbox_info = None
 ### Repeating further code till runlimit with a delay of wait_time, wait_time is in millisecs
 ##########################################################
 runlimit = 20
-milli_sec = 50
+milli_sec = 200
 milli_sec = milli_sec / 1000
 
 for i in range(runlimit):
@@ -208,10 +209,11 @@ for i in range(runlimit):
                 contact_details = get_full_contactbox_info(name)
                 if contact_details != None:
                     # print(contact_details.get("contact"))
-                    ### Backing up all contact dictionaries
-                    contacts_dict_list.append(contact_details)
-                    contacts_name_set.add(contact_details.get("contact"))
-                    ### All data is stored in two data sets-> contacts_dict_list, contacts_name_set
+                    ### Verification via set (contacts_name_set)
+                    # contacts_name_set.add(contact_details.get("contact"))
+                    # old_elem_in_set = contacts_name_set.pop()
+                    if contact_details.get("contact") not in contacts_name_set:
+                        contacts_data_list.append([contact_details.get("contact"),contact_details.get("msg_preview")])
             # try:
                 
             # except:
@@ -255,17 +257,31 @@ for i in range(runlimit):
                 chatbox_name_set.add(name_to_add)
                     ### Backing up data
                 chat_contactswise_list.append(full_chatbox_info)
-                    # print(ls)
-                    # ls = None
-                    ### Adding to final list
+
+                ### Adding to final list
                 # if contacts_name_set.intersection(set(name_to_add)) != Final_List_Of_DATA_Lists[-1][0]:
-                
+                ### Searching here according to contacts_data_list's names & first message
+
+                for i in contacts_data_list:
+                    ### Checking msg preview with ls new scraped data
+                    if i[1] in ls[3].split('\n'):
+                            
+
+
+
+                # ValueError
+                    
+
+
                 if ls[0] != Final_List_Of_DATA_Lists[-1][0]:
                     if ls[1] != Final_List_Of_DATA_Lists[-1][1]:
                         if ls[2] != Final_List_Of_DATA_Lists[-1][2]:
                             if ls[3] != Final_List_Of_DATA_Lists[-1][3]:
                                 Final_List_Of_DATA_Lists.append(ls)
-                                print(Final_List_Of_DATA_Lists[-1])
+
+                                print(Final_List_Of_DATA_Lists[-1][0],
+                                      Final_List_Of_DATA_Lists[-1][1],
+                                      Final_List_Of_DATA_Lists[-1][2])
             # if ls[0] != Final_List_Of_DATA_Lists[-1][0] & ls[1] != Final_List_Of_DATA_Lists[-1][1] & ls[2] != Final_List_Of_DATA_Lists[-1][2] & ls[3] != Final_List_Of_DATA_Lists[-1][3]:
                 
             # try:
@@ -302,14 +318,31 @@ for i in range(runlimit):
 
 #%%
 # print(chatbox_name_set)
-print()
 # print(chat_contactswise_list)
-get_full_contactbox_info(driver.find_elements_by_class_name("X7YrQ"))
+# get_full_contactbox_info(driver.find_elements_by_class_name("X7YrQ"))
 
 # %%
+
+print()
+
+print()
+
 Final_List_Of_DATA_Lists
 
+
+
+
+
+
 # %%
-ls
+mysetu = set()
+
+for i in contacts_data_list:
+    mysetu.add(i)
+print(mysetu)
 
 
+
+
+
+# %%
