@@ -15,9 +15,6 @@ import pandas as pd
 print("### Packages Imported ###")
 print(datetime.datetime.now())
 
-
-
-
 # %% # (2)
 
 def load_output():
@@ -213,8 +210,3 @@ for i in range(runlimit):
     if already_waited == False:
         time.sleep(milli_sec)
     print("Ran for ", i, " Time", len(contacts_name_set), len(chatbox_name_set))
-
-
-#%%
-print()
-get_full_contactbox_info(driver.find_elements_by_class_name("X7YrQ"))
