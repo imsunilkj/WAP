@@ -1,17 +1,19 @@
 
+import datetime
+import time
 # %%
 ### Imports ### (1
 from datetime import datetime
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
-from bs4 import BeautifulSoup
-from email_validator import validate_email, EmailNotValidError
-from phonenumbers import carrier
-import time
-import phonenumbers
-import datetime
+
 import pandas as pd
+import phonenumbers
+from bs4 import BeautifulSoup
+from email_validator import EmailNotValidError, validate_email
+from phonenumbers import carrier
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
+
 print("### Packages Imported ###")
 print(datetime.datetime.now())
 
@@ -158,6 +160,25 @@ def update_final(ls):
         #       Final_List_Of_DATA_Lists[-1][1], " ",
         #       Final_List_Of_DATA_Lists[-1][2], " ",)
 
+### Left Box, All Contacts
+contacts_name_set = set() ### Set of all contacts (Unique String Elements), left tab
+contacts_list = list() ### All scrapped names from contact selection, left tab
+### Right Box, Selected Contact & Respective Chat
+chatbox_name_set = set() ### Set of all contacts (Unique String Elements), Right tab
+contacts_name_set.add('Sunil')
+# chat_contactswise_list = list() ### All scrapped names from selection contact, Right tab
+Final_Names_Set = set()
+Final_List_Of_DATA_Lists = []
+# Final_List_Of_DATA_Lists.append(['Name', 'Phone Number', 'Email IDs','Last 10 Messages'     ])
+# Final_List_Of_DATA_Lists.append(['Sunil', '9555776578', 'imsunilkj@gmail.com','Hello World'     ])
+current_contact_selected = None ### Currently selected contact while execution #May be unnecessary  
+tab_left_indexes = None
+tab_right_indexes = None
+name_to_add = None
+full_chatbox_info = None
+# FIXME this df is for final result
+# dataframe = pd.DataFrame(columns=['Name', 'Phone Numbers', 'Email Ids', 'Last Messages'], ignore_index=True)
+
 print('Functions Loaded')
 
 
@@ -175,28 +196,6 @@ if True: # Refresh
     time.sleep(1)
     driver.refresh()
 
-    ### Left Box, All Contacts
-    contacts_name_set = set() ### Set of all contacts (Unique String Elements), left tab
-    contacts_list = list() ### All scrapped names from contact selection, left tab
-
-    ### Right Box, Selected Contact & Respective Chat
-    chatbox_name_set = set() ### Set of all contacts (Unique String Elements), Right tab
-    contacts_name_set.add('Sunil')
-
-    # chat_contactswise_list = list() ### All scrapped names from selection contact, Right tab
-    Final_Names_Set = set()
-    Final_List_Of_DATA_Lists = []
-    Final_List_Of_DATA_Lists.append(['Name', 'Phone Number', 'Email IDs','Last 10 Messages'     ])
-    Final_List_Of_DATA_Lists.append(['Sunil', '9555776578', 'imsunilkj@gmail.com','Hello World'     ])
-
-    current_contact_selected = None ### Currently selected contact while execution #May be unnecessary  
-
-    tab_left_indexes = None
-    tab_right_indexes = None
-    name_to_add = None
-    full_chatbox_info = None
-    # FIXME this df is for final result
-    # dataframe = pd.DataFrame(columns=['Name', 'Phone Numbers', 'Email Ids', 'Last Messages'], ignore_index=True)
 
 
 # %%
@@ -325,6 +324,3 @@ get_full_contactbox_info(driver.find_elements_by_class_name("X7YrQ"))
 #                             if ls[3] != Final_List_Of_DATA_Lists[-1][3]:
 #                                 Final_List_Of_DATA_Lists.append(ls)
 #                                 print(Final_List_Of_DATA_Lists[-1])
-
-
-
