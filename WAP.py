@@ -15,6 +15,9 @@ import pandas as pd
 print("### Packages Imported ###")
 print(datetime.datetime.now())
 
+
+
+
 # %% # (2)
 
 def pandu():
@@ -40,9 +43,7 @@ def pandu():
     print(df)
     print('Hello')
     # pandu()
-##########################################################
-### Defined Functions ####################################
-##########################################################
+
 def load_driver_and_webpage():
     ### Loading chrome in web driver and Opening webpage ###
     driver = webdriver.Chrome()
@@ -53,7 +54,7 @@ def load_driver_and_webpage():
     ### Web page should be opened up and ready for further execution ###
     return driver
     ### Web page should be opened up and ready for further execution ###
-##########################################################
+
 def get_full_contactbox_info(contact_box):
     ### Details is information dictionary to return
     ### Getting exact contact by CSS
@@ -68,19 +69,23 @@ def get_full_contactbox_info(contact_box):
         "msg_preview": fst_msg_box,
     }
     return thisdict
-##########################################################
 
 def get_exact_contact_name_from_chat(chat_box):
     ### Getting exact contact name with _19vo_
     return chat_box.find_element_by_class_name("_19vo_").text
-##########################################################
 
 def clutfree(chat):
     ### Words to remove ###
-    days = """MONDAY TUESDAY WEDNESDAY THURSDAY FRIDAY SATURDAY SUNDAY YESTERDAY TODAY"""
-    ### Converted to list and added words###
-    remove_list = days.split(' ')
-    remove_list.append('UNREAD MESSAGE')  # Appedded 'UNREAD MESSAGE'
+    remove_list = ['MONDAY',
+                   'TUESDAY',
+                   'WEDNESDAY',
+                   'THURSDAY',
+                   'FRIDAY',
+                   'SATURDAY',
+                   'SUNDAY',
+                   'YESTERDAY',
+                   'TODAY',
+                   'UNREAD MESSAGE']
 
     final_list = []
     for word in chat:
@@ -93,7 +98,6 @@ def clutfree(chat):
             if ((str.endswith(' AM') or str.endswith(' PM')) != True):
                final_list.append(str)
     return final_list
-##########################################################
 
 def get_full_chatbox_info(chat_box):
     phone_nums = ""
@@ -145,32 +149,33 @@ def get_full_chatbox_info(chat_box):
     # print(temp)
     # return chatdict
     return chatdict
-##########################################################
+
 print('Functions Loaded')
-##########################################################
-##########################################################
+
+
+
 
 # %% # (3
-
-##########################################################
-### Final Execution ######################################
-##########################################################
 driver = load_driver_and_webpage()
-##########################################################
 
-#%% ######################################################
+
+
+
+#%% 
+# ######################################################
 ### Refreash Page and Variables ### Optional
-##########################################################
 time.sleep(1)
 driver.refresh()
-### Final Data and Constructor behaviour ###
+
 ### Left Box, All Contacts
 contacts_name_set = set() ### Set of all contacts (Unique String Elements), left tab
-contacts_dict_list = list() ### All scrapped names from contact selection, left tab
+contacts_list = list() ### All scrapped names from contact selection, left tab
+
 ### Right Box, Selected Contact & Respective Chat
 chatbox_name_set = set() ### Set of all contacts (Unique String Elements), Right tab
 contacts_name_set.add('Sunil')
-chat_contactswise_list = list() ### All scrapped names from selection contact, Right tab
+
+# chat_contactswise_list = list() ### All scrapped names from selection contact, Right tab
 Final_List_Of_DATA_Lists = []
 Final_List_Of_DATA_Lists.append(['Name', 'Phone Number', 'Email IDs','Last 10 Messages'     ])
 Final_List_Of_DATA_Lists.append(['Sunil', '9555776578', 'imsunilkj@gmail.com','Hello World'     ])
@@ -183,66 +188,61 @@ name_to_add = None
 full_chatbox_info = None
 # FIXME this df is for final result
 # dataframe = pd.DataFrame(columns=['Name', 'Phone Numbers', 'Email Ids', 'Last Messages'], ignore_index=True)
-##########################################################
+
 
 # %%
 ### Final Execution ### Webpage3 should be ready, last Execution
-##########################################################
 ### Repeating further code till runlimit with a delay of wait_time, wait_time is in millisecs
-##########################################################
-runlimit = 20
+
+runlimit = 25
 milli_sec = 50
 milli_sec = milli_sec / 1000
 
 for i in range(runlimit):
         already_waited = False
-        ##########################################################
-        ##########################################################
         ### Got Both, 1) Allcontact boxes, 2)Chat box
         tab_left_indexes = driver.find_elements_by_class_name("X7YrQ")
         tab_right_indexes = driver.find_elements_by_class_name("NuujD")
-        ##########################################################
-        ### Getting contact(name or number) in string
+    
+        ### 1) Getting contact(name or number) in string
         for name in tab_left_indexes:
                 ### Getting all data from contact box
-                contact_details = get_full_contactbox_info(name)
-                if contact_details != None:
-                    # print(contact_details.get("contact"))
+                try:
+                    contact_details = get_full_contactbox_info(name)
+                except:
+                    print("Error getting contact")
+                    pass
+                # Checking duplicate contact with string set
+                if str(contact_details.get("contact")) not in contacts_name_set:
                     ### Backing up all contact dictionaries
-                    contacts_dict_list.append(contact_details)
-                    contacts_name_set.add(contact_details.get("contact"))
-                    ### All data is stored in two data sets-> contacts_dict_list, contacts_name_set
-            # try:
-                
-            # except:
-            #     print('### Error on Left, Waiting... ###')
-            #     time.sleep(milli_sec)
-            #     already_waited = True
-        ##########################################################
-
+                    contacts_name_set.add(str(contact_details.get("contact")))
+                    contacts_list.append(contact_details)
         for chat_box in tab_right_indexes:
+            ### 2) Getting contact name again(For verification) and chatbox
+            ### Scraping exact contact(name or number) from chat_box
             ls = list()
-                ### Getting contact name again(For verification) and chats
-                ### Scraping exact contact(name or number) from chat_box
             try:
                 current_contact_selected = get_exact_contact_name_from_chat(chat_box)
-                if current_contact_selected != None:
-                    print(current_contact_selected)
-                    chatbox_name_set.add(str(current_contact_selected))
             except:
+                print("Error getting selected contact")
                 pass
-
-
-                ### Getting chat from selected box
-                ### Will received this dictionary by get_full_chatbox_info()
-                ### Getting full selected chat box data
+            
+            # Checking duplicate contact from chatbox with string set
+            if current_contact_selected not in chatbox_name_set:
+                print(current_contact_selected) # FIXME printing
+                chatbox_name_set.add(str(current_contact_selected))
+            
+            ### 3) Getting chat from selected box
+            ### Will received this dictionary by get_full_chatbox_info()
+            ### Getting full selected chat box data
             try:
                 full_chatbox_info = get_full_chatbox_info(chat_box)
             except:
+                print("Error getting selected contact chat")
                 pass
-                #  print(full_chatbox_info.get('phone_numbers'),full_chatbox_info.get('email_ids'),full_chatbox_info.get('messages'))
-                ### Checking if received final data or not
-                #   if yes, Will add all data to final data 
+            
+            ### Checking if received final data or not
+            #   if yes, Will add all data to final data 
             if full_chatbox_info.get('messages') != Final_List_Of_DATA_Lists[-1][-1]:
                 name_to_add = chatbox_name_set.pop() 
                     ### Adding data to final sheet
@@ -253,12 +253,6 @@ for i in range(runlimit):
                 ls.append(full_chatbox_info.get('messages'))
                     ### Adding again to contact set
                 chatbox_name_set.add(name_to_add)
-                    ### Backing up data
-                chat_contactswise_list.append(full_chatbox_info)
-                    # print(ls)
-                    # ls = None
-                    ### Adding to final list
-                # if contacts_name_set.intersection(set(name_to_add)) != Final_List_Of_DATA_Lists[-1][0]:
                 
                 if ls[0] != Final_List_Of_DATA_Lists[-1][0]:
                     if ls[1] != Final_List_Of_DATA_Lists[-1][1]:
@@ -266,27 +260,7 @@ for i in range(runlimit):
                             if ls[3] != Final_List_Of_DATA_Lists[-1][3]:
                                 Final_List_Of_DATA_Lists.append(ls)
                                 print(Final_List_Of_DATA_Lists[-1])
-            # if ls[0] != Final_List_Of_DATA_Lists[-1][0] & ls[1] != Final_List_Of_DATA_Lists[-1][1] & ls[2] != Final_List_Of_DATA_Lists[-1][2] & ls[3] != Final_List_Of_DATA_Lists[-1][3]:
-                
-            # try:
-            # except:
-            #     print('### Error on right, Waiting... ###')
-            #     time.sleep(milli_sec)
-            #     already_waited = True
-            
-    
-                
-        ##########################################################
-        ##########################################################
-            # dataframe.append({
-            #         'Name': 'suniol',
-            #         'Phone Numbers': full_chatbox_info.get('phone_numbers'),
-            #         'Email Ids': full_chatbox_info.get('email_ids'),
-            #         'Last Messages': full_chatbox_info.get('messages')
-            #         })
-        ####################
-        ### Analyse Here ### TODO
-        ####################
+
         i = i + 1
         if already_waited == False:
             time.sleep(milli_sec)
@@ -300,16 +274,17 @@ for i in range(runlimit):
 # print(contacts_name_set)
 # dataframe.tail[1]
 
+
+
+
+
+
 #%%
 # print(chatbox_name_set)
 print()
 # print(chat_contactswise_list)
 get_full_contactbox_info(driver.find_elements_by_class_name("X7YrQ"))
 
-# %%
-Final_List_Of_DATA_Lists
 
-# %%
-ls
 
 
